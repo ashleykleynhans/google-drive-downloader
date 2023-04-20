@@ -41,7 +41,7 @@ def download_file(file_id, file_name, output_path):
 
     while done is False:
         status, done = downloader.next_chunk()
-        print(f'Download {int(status.progress() * 100)}.')
+        print(f'Progress: {int(status.progress() * 100)}%')
 
     file.seek(0)
 
