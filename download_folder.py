@@ -20,13 +20,20 @@ def get_args():
         '--folder-id', '-folder-id', '--f', '-f',
         type=str,
         required=True,
-        help='AWS region (eg. us-east-1)'
+        help='Folder ID of the Google Drive Folder (eg. 1YvFj33Bfum4YuBeqNNCYLfiBrD4tpzg7)'
+    )
+
+    parser.add_argument(
+        '--output-path', '-output-path', '--o', '-o',
+        type=str,
+        required=True,
+        help='Output path to save downloaded files (eg. /tmp)'
     )
 
     return parser.parse_args()
 
 
-def download_file(file_id, file_name):
+def download_file(file_id, file_name, output_path):
     request = service.files().get_media(fileId=file_id)
     file = io.BytesIO()
     downloader = MediaIoBaseDownload(file, request)
@@ -38,7 +45,7 @@ def download_file(file_id, file_name):
 
     file.seek(0)
 
-    with open(file_name, 'wb') as f:
+    with open(f'{output_path}/{file_name}', 'wb') as f:
         f.write(file.read())
 
 
@@ -69,6 +76,7 @@ def get_files_in_folder(folder_id):
 if __name__ == '__main__':
     args = get_args()
     folder_id = args.folder_id
+    output_path = args.output_path
 
     # Initialize the Drive API client
     creds = None
@@ -97,4 +105,4 @@ if __name__ == '__main__':
         file_id = file['id']
         file_name = file['name']
         print(f'Downloading {file_name}...')
-        download_file(file_id, file_name)
+        download_file(file_id, file_name, output_path)
