@@ -104,5 +104,5 @@ if __name__ == '__main__':
     for file in files:
         file_id = file['id']
         file_name = file['name']
-        print(f'Downloading {file_name}...')
+        print(f'Downloading {file_name} to {output_path}/{file_name}...')
         download_file(file_id, file_name, output_path)
